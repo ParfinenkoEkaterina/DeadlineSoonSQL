@@ -1,32 +1,32 @@
 package PageObjects;
 
-import Data.DataHelper;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.Keys;
+import Data.DataHelper;
 
-import static com.codeborne.selenide.Condition.visible;
+import java.sql.Connection;
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
-
+import static java.awt.SystemColor.info;
 
 public class LoginPage {
-    @FindBy(css = "[data-test-id=login] input")
-    private SelenideElement loginField;
-    @FindBy(css = "[data-test-id=password] input")
-    private SelenideElement passwordField;
-    @FindBy(css = "[data-test-id=action-login]")
-    private SelenideElement loginButton;
-    @FindBy(css = "[data-test-id ='error-notification']")
-    private SelenideElement errorNotification;
+    private SelenideElement login = $("[data-test-id=login] input");
+    private SelenideElement password = $("[data-test-id=password] input");
+    private SelenideElement loginButton = $("[data-test-id=action-login]");
+    private SelenideElement error = $("[data-test-id=error-notification]");
 
-    public void verifyErrorNotificationVisiblity() {
-        errorNotification.shouldBe(visible);
-    }
-
-    public AuthPage validLogin(DataHelper.AuthInfo info) {
-        loginField.setValue(info.getLogin());
-        passwordField.setValue(info.getPassword());
+    public VerificationPage validLogin(DataHelper.AuthInfo info) {
+        login.setValue(info.getLogin());
+        password.setValue(info.getPassword());
         loginButton.click();
-        return page (AuthPage.class);
+        return new VerificationPage();
     }
+
+    public void getError() {
+        error.shouldBe(Condition.visible, Duration.ofSeconds(15));
+    }
+
 }

@@ -9,29 +9,10 @@ import lombok.Value;
 import java.util.Locale;
 
 public class DataHelper {
+    private DataHelper() {
+    }
+
     private static Faker faker = new Faker(new Locale("en"));
-
-    private DataHelper() {}
-
-    public static AuthInfo getAuthInfo() {
-        return new AuthInfo ("vasya", "qwerty123");
-    }
-
-    private static String generateLogin() {
-        return faker.name().username();
-    }
-
-    private static String generatePassword() {
-        return faker.internet().password();
-    }
-
-    public static AuthInfo generateUser() {
-        return new AuthInfo (generateLogin(), generatePassword());
-    }
-
-    public static VerificationCode generateVerificationCode() {
-        return new VerificationCode (faker.numerify("######"));
-    }
 
     @Value
     public static class AuthInfo {
@@ -39,9 +20,29 @@ public class DataHelper {
         String password;
     }
 
+    private static String getRandomLogin() {
+        return faker.name().username();
+    }
+
+    private static String getRandomPassword() {
+        return faker.internet().password();
+    }
+
+    public static AuthInfo getRandomUser() {
+        return new AuthInfo(getRandomLogin(), getRandomPassword());
+    }
+
+    public static AuthInfo getAuthInfoWithTestData() {
+        return new AuthInfo("vasya", "qwerty123");
+    }
+
     @Value
     public static class VerificationCode {
         String code;
+    }
+
+    public static VerificationCode getRandomVerificationCode() {
+        return new VerificationCode(faker.numerify("######"));
     }
 
     @Data
